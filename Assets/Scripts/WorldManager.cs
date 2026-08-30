@@ -3,31 +3,6 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
-public struct Tile //Tile struct to hold tile data.
-{
-    public TileType tileType;
-    public float tileDanger;
-    public bool moveable;
-    public bool isCity;
-}
-
-public class Chunk
-{
-    public Vector2Int index; //(Chunk X value, Chunk Y value)
-    public Tile[,] tiles; // [32,32] 32x32 chunk for example.
-}
-
-public enum TileType
-{
-    Grass,
-    Forest,
-    Mountain,
-    Water,
-    City
-}
-
-
-
 public class WorldManager
 {
     /* this will hold these things...

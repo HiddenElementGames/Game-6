@@ -3,7 +3,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
-public class WorldManager
+public class WorldManager : MonoBehaviour 
 {
     /* this will hold these things...
     [x] world coordinate understanding
@@ -21,8 +21,20 @@ public class WorldManager
     public int chunkSize = 32;
     public float tileSize = 1.0f;
     public int loadRadius = 2; //number of chunks to keep loaded
+    public IReadOnlyDictionary<Vector2Int, Chunk> Chunks => chunks; // allows read only access to the current dict of created chunks.
 
     private Dictionary<Vector2Int, Chunk> chunks = new(); //"World" -> chunk Dictionary.
+
+    void Awake()
+    {
+        Instance = this;
+    }
+
+    void Start()
+    {
+        LoadChunks(Vector2Int.zero);
+    }    
+
 
     //World Coordinate Conversion Manager
     public Vector2Int WorldToTile(Vector2 worldPos)
@@ -55,7 +67,7 @@ public class WorldManager
             {
                 Vector2Int index = centerChunk + new Vector2Int(x, y);
 
-                if (chunks.ContainsKey(index))//check if we need to generate the chunk.
+                if (!chunks.ContainsKey(index))//check if we need to generate the chunk.
                 {
                     GenerateChunk(index); //create it if we need to.
                 }
@@ -108,8 +120,10 @@ public class WorldManager
                 };
             }
         }
-        //End ChunkGenerator
 
-
+        chunks[index] = chunk;
+        //Debug.Log("GenChunK: " + index);
     }
+    //End ChunkGenerator
+
 }

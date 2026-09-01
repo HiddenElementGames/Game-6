@@ -2,7 +2,7 @@ using UnityEngine;
 
 public static class TileMeshBuilder
 {
-
+    /*
     public static Mesh BuildTileMesh(float borderThickness)
     {
         borderThickness = Mathf.Clamp(borderThickness, 0f, 0.45f); //forces the border to stay within a safe range for the tile.
@@ -37,7 +37,7 @@ public static class TileMeshBuilder
             //inner quad
             4,5,6,
             4,6,7
-            */
+            
             
             //reverse winding.
             //outer
@@ -89,7 +89,24 @@ public static class TileMeshBuilder
         mesh.uv = uvs;
         mesh.colors = colors;
 
-        mesh.SetTriangles(triangles, 0); // Defining a submesh to allow the mesh to be loaded over it? I think?
+        //mesh.SetTriangles(triangles, 0); // Defining a submesh to allow the mesh to be loaded over it? I think?
+
+        //define two distinct submeshs for each quad
+        mesh.subMeshCount = 2;
+
+        // Outer quad
+        mesh.SetTriangles(new int[]
+        {
+             0,1,2,
+             0,2,3
+        }, 0);
+
+        // Inner quad
+        mesh.SetTriangles(new int[]
+        {
+            4,5,6,
+            4,6,7
+        }, 1);
 
         mesh.RecalculateNormals(); //FOR SOME REASON, UNITY NEEDS THIS?!?!?
         mesh.RecalculateBounds(); //calc the bounding box
@@ -103,6 +120,61 @@ public static class TileMeshBuilder
         return mesh;
 
     }
+
+    */
+
+
+    public static Mesh BuildTileMesh(float borderThickness)
+    {
+        borderThickness = Mathf.Clamp(borderThickness, 0f, 0.45f);
+
+        float b = borderThickness;
+
+        // Outer quad
+        Vector3 v0 = new Vector3(0f, 0f, 0f);
+        Vector3 v1 = new Vector3(1f, 0f, 0f);
+        Vector3 v2 = new Vector3(1f, 1f, 0f);
+        Vector3 v3 = new Vector3(0f, 1f, 0f);
+
+        // Inner quad
+        Vector3 v4 = new Vector3(b, b, 0f);
+        Vector3 v5 = new Vector3(1f - b, b, 0f);
+        Vector3 v6 = new Vector3(1f - b, 1f - b, 0f);
+        Vector3 v7 = new Vector3(b, 1f - b, 0f);
+
+        Mesh mesh = new Mesh();
+        mesh.name = "TileWithBorder";
+
+        mesh.vertices = new[]
+        {
+            v0, v1, v2, v3,
+            v4, v5, v6, v7
+        };
+
+        mesh.triangles = new[]
+        {
+            // outer
+            0, 1, 2,
+            0, 2, 3,
+            // inner
+            4, 5, 6,
+            4, 6, 7
+        };
+
+        mesh.colors = new[]
+        {
+            Color.black, Color.black, Color.black, Color.black,
+            Color.green, Color.green, Color.green, Color.green
+        };
+
+        mesh.RecalculateNormals();
+        mesh.RecalculateBounds();
+
+        return mesh;
+    }
+
+
+
 }
 
 

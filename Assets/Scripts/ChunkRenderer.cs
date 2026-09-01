@@ -6,11 +6,24 @@ public class ChunkRenderer : MonoBehaviour
 {
     public Mesh tileMesh;
     public Material tileMaterial;
+    public float tileSize = 1f;
+    public float borderThickness = 0.05f; //5% of the total tile width, total possible range 0-0.45 defined in builder.
+
+
 
     private WorldManager world;
 
 
+    private void Awake()
+    {
+        //test mesh for when the custom mesh fails.
+        //tileMesh = Resources.GetBuiltinResource<Mesh>("Quad.fbx");
 
+        //Build the tile mesh with border width for renderer.
+        tileMesh = TileMeshBuilder.BuildTileMesh(borderThickness);
+        //Debug.Log($"TileMesh verts: {tileMesh.vertexCount}, triangles: {tileMesh.triangles.Length}");
+    
+    }
 
     void Start()
     {
@@ -20,6 +33,12 @@ public class ChunkRenderer : MonoBehaviour
 
     void Update()
     {
+        if(world==null)
+        {
+            Debug.LogError("WorldManager instance is NULL.");
+            return;
+        }
+
         foreach (var kvp in world.Chunks)
         {
             RenderChunk(kvp.Value);
@@ -56,6 +75,7 @@ public class ChunkRenderer : MonoBehaviour
             }
         }
 
+        //Debug.Log($"RenderChunk {chunk.index} matrices: {matrices.Count}");
 
         for (int i = 0; i < matrices.Count; i += 1023) //iterate through each chunk, drawing each tile. 1023 is apparently, Unity API hard limit.
         {

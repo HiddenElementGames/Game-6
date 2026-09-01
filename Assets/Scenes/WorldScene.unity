@@ -323,7 +323,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ChunkRenderer
   tileMesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
-  tileMaterial: {fileID: 2100000, guid: c10e35b08141ff64db89633355112d9e, type: 2}
+  tileMaterial: {fileID: 2100000, guid: 08419018e723eac499348881cd586921, type: 2}
+  tileSize: 1
+  borderThickness: 0.05
 --- !u!4 &792673865
 Transform:
   m_ObjectHideFlags: 0
